@@ -36,7 +36,7 @@ Except variables are restricted to occur only once and are freed to occur global
 
 ## Reduction rules
 
-There are 4 reduction rules. Two of them are usual: the application of a lambda, and the projection of a pair. The other two deal with the previously unspecified cases: "applying a pair" and "projecting a lambda". The first performs a parallel application, and the second performs an incremental duplication.
+There are 4 reduction rules. Two of them are usual: the application of a lambda, and the projection of a pair. The other two deal with the previously unspecified cases: "applying a pair" and "projecting a lambda". The first performs a parallel application, and the second performs an incremental duplication. All of them are constant-time operations.
 
 ```haskell
 -- Rule 0: lambda-application
