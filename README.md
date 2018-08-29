@@ -23,7 +23,7 @@ The [Abstract Calculus](https://medium.com/@maiavictor/the-abstract-calculus-fe8
 The syntax is obtained by simply extending the Lambda Calculus with `pairs` and `let`:
 
 
-```
+```haskell
 term ::=
   | λx. term                 -- abstraction (affine function)
   | (term term)              -- application
@@ -74,7 +74,7 @@ Here, `[a / b]` stands for a global substitution of the occurrence of `a` by `b`
 
 ### Example 0: lambda-application and pair-projection (nothing new).
 
-```
+```haskell
 λu. λv. let (a,b) = (λx.x, λy.y) in (a u, b v)
 ----------------------------------------------  pair-projection
 λu. λv. (λx.x u, λy.y v)
@@ -86,7 +86,7 @@ Here, `[a / b]` stands for a global substitution of the occurrence of `a` by `b`
 
 ### Example 1: using lambda-projection to copy a function.
 
-```
+```haskell
 let (a,b) = λx.λy.λz.y in (a,b)
 ------------------------------- lambda-projection
 let (a,b) = λy0. λz0. y0 in (λx.a, λx1.b)
@@ -100,7 +100,7 @@ let (a,b) = (y0,y1) in (λx0. λy0. λz0. a, λx1. λy1. λz1. b)
 
 ### Example 2: demonstrating pair-application.
 
-```
+```haskell
 ((λx.x, λy.y) λt.t) 
 ------------------- pair-application
 let (a0,a1) = λt. t in ((λx.x a0), (λy.y a1))
