@@ -116,7 +116,7 @@ let (a0,a1) = (t0,t1) in ((λx.x λt0.a0), (λy.y λt1.a1))
 
 This is equivalent to:
 
-```
+```haskell
 data Nat = S Nat | Z
 
 add : Nat -> Nat -> Nat
