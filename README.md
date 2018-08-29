@@ -41,8 +41,8 @@ There are 4 reduction rules. Two of them are usual: the application of a lambda,
 ```haskell
 -- Rule 0: lambda-application
 
-(λx.f a)
----------
+((λx.f) a)
+----------
 f [x / a]
 
 -- Rule 1: pair-projection
@@ -60,15 +60,15 @@ in ((u x0),(v x1))
 
 -- Rule 3: lambda-projection
 
-let (p,q) = (λx. f) in t
-------------------------
+let (p,q) = (λx.f) in t
+-----------------------
 let (p,q) = f in t
 [p / λx0.p]
 [q / λx1.q]
 [x / (x0,x1)]
 ```
 
-Here, `[a / b]` stands for a global substitution of the occurrence of `a` by `b`, and `x0`, `x1` are fresh variables.
+Here, `[a / b]` stands for a global substitution of the occurrence of `a` by `b`, and `x0`, `x1` are fresh variables. I've used additional parenthesis around lambdas to make the reading clearer.
 
 ## Examples
 
@@ -77,10 +77,10 @@ Here, `[a / b]` stands for a global substitution of the occurrence of `a` by `b`
 ```haskell
 λu. λv. let (a,b) = (λx.x, λy.y) in (a u, b v)
 ----------------------------------------------  pair-projection
-λu. λv. (λx.x u, λy.y v)
------------------------- lambda-application
-λu. λv. (λx.x u, v)
-------------------- lambda-application
+λu. λv. ((λx.x) u, (λy.y) v)
+---------------------------- lambda-application
+λu. λv. ((λx.x) u, v)
+--------------------- lambda-application
 λu. λv. (u, v)
 ```
 
@@ -89,13 +89,13 @@ Here, `[a / b]` stands for a global substitution of the occurrence of `a` by `b`
 ```haskell
 let (a,b) = λx.λy.λz.y in (a,b)
 ------------------------------- lambda-projection
-let (a,b) = λy0. λz0. y0 in (λx.a, λx1.b)
------------------------------------------ lambda-projection
-let (a,b) = λz0. (y0,y1) in (λx0. λy0. a, λx1. λy1. b)
------------------------------------------------------- lambda-projection
-let (a,b) = (y0,y1) in (λx0. λy0. λz0. a, λx1. λy1. λz1. b)
------------------------------------------------------------ pair-projection
-(λx0. λy0. λz0. y0, λx1. λy1. λz1. y1)
+let (a,b) = λy0.λz0.y0 in (λx.a, λx1.b)
+--------------------------------------- lambda-projection
+let (a,b) = λz0. (y0,y1) in (λx0.λy0.a, λx1.λy1.b)
+-------------------------------------------------- lambda-projection
+let (a,b) = (y0,y1) in (λx0.λy0.λz0.a, λx1.λy1.λz1.b)
+----------------------------------------------------- pair-projection
+(λx0.λy0.λz0.y0, λx1.λy1.λz1.y1)
 ``` 
 
 ### Example 2: demonstrating pair-application.
@@ -103,12 +103,14 @@ let (a,b) = (y0,y1) in (λx0. λy0. λz0. a, λx1. λy1. λz1. b)
 ```haskell
 ((λx.x, λy.y) λt.t) 
 ------------------- pair-application
-let (a0,a1) = λt. t in ((λx.x a0), (λy.y a1))
+let (a0,a1) = λt. t in ((λx.x) a0, (λy.y) a1)
 --------------------------------------------- lambda-projection
-let (a0,a1) = (t0,t1) in ((λx.x λt0.a0), (λy.y λt1.a1))
+let (a0,a1) = (t0,t1) in ((λx.x) λt0.a0, (λy.y) λt1.a1)
 -------------------------------------------------------  pair-projection
-((λx.x λt0.t0), (λy.y, λt1.t1))
+((λx.x) λt0.t0, (λy.y) λt1.t1)
 ------------------------------- lambda-application
+((λx.x) λt0.t0, λt1.t1)
+----------------------- lambda-application
 (λt0.t0, λt1.t1)
 ```
 
