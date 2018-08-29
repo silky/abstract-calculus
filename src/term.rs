@@ -224,10 +224,13 @@ pub fn to_net(term : &Term) -> Net {
             }
         }
     }
+    // Initializes net with a root node
     let mut net = Net { nodes: vec![0,2,1,4], reuse: vec![] };
     let mut vars = Vec::new();
     let mut scope = HashMap::new();
-    let root = encode_term(&mut net, &term, 0, &mut scope, &mut vars);
+    // Encodes the main term
+    let main = encode_term(&mut net, &term, 0, &mut scope, &mut vars);
+    // Links bound variables
     for i in 0..vars.len() {
         let (ref nam, var) = vars[i];
         match scope.get(nam) {
@@ -242,7 +245,8 @@ pub fn to_net(term : &Term) -> Net {
             None => panic!("Unbound variable: {}.", std::str::from_utf8(nam).unwrap())
         }
     }
-    link(&mut net, 0, root);
+    // Links the term to the net's root
+    link(&mut net, 0, main);
     net
 }
 
@@ -297,9 +301,11 @@ pub fn from_net(net : &Net) -> Term {
             }
         }
     }
+    // Reads the main term from the net
     let mut node_name = HashMap::new();
     let mut new_dups = Vec::new();
     let mut main = read_term(net, enter(net, 0), &mut node_name, &mut new_dups);
+    // Reads top-level let..in definitions found
     while new_dups.len() > 0 {
         let (nam, dup) = new_dups.pop().unwrap();
         let val = read_term(net, enter(net,port(dup,0)), &mut node_name, &mut new_dups);
