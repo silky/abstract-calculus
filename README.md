@@ -32,7 +32,7 @@ term ::=
   | x                        -- variable
 ```
 
-Except variables are restricted to occur only once and are freed to occur globally (even outside their λ's bodies).
+Except variables are restricted to occur only once and are freed to occur globally ([why?](https://stackoverflow.com/questions/52048420/can-a-calculus-have-incremental-copying-and-closed-scopes)).
 
 ## Reduction rules
 
